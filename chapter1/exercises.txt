@@ -1,0 +1,8 @@
+Determine if each of the one are Combinators
+Combinators
+1. lambda x.xxx - yes
+2. lambda xy.zx - no (z)
+3. lambda xyz.xy(zx) - yes
+4. lambda xyz.xy(zxy) - yes 
+5. lambda xy.xy(zxy) - no (z)
+

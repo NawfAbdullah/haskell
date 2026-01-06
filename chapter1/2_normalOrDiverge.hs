@@ -1,0 +1,7 @@
+-- Determine if each of the following can be reduced to a normal form or if they diverge.
+-- 1. lambda x.xxx - normal form
+-- 2. lambda (lambda z.zz)(lambda y.yy) - the equation will diverge
+--      (lambda z.zz)(lambda y.yy)
+--      [z:= lambda y.yy]
+--      (lambda y.yy)(lambda y.yy) same thing
+-- 3. (lambda x.xxx)z - zzz normal form

@@ -1,0 +1,4 @@
+-- Equivalence Exercises
+-- 1. lambda xy.xz - b lambda mn.mz
+-- 2. lambda xy.xxy - c lambda a (lambda b.aab)
+-- 3. lambda xyz.zx - b lambda tos.st
