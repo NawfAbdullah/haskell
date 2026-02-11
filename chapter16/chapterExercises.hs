@@ -113,4 +113,4 @@ instance Functor TalkToMe where
     fmap f Halt = Halt
     fmap f (Print b a) =  Print b (f a)
     fmap f (Read g) = Read (\s -> f (g s))
-    
+
