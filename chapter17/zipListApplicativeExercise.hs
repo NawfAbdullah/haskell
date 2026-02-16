@@ -1,12 +1,7 @@
 module ListApplicative where
-import Main (z)
 
 data List a = Nil | Cons a (List a) deriving (Eq, Show)
 
--- ==========================================
--- Part 1: Helper Functions
--- You will need these to implement the instances below.
--- ==========================================
 
 append :: List a -> List a -> List a
 append Nil ys = ys 
@@ -46,5 +41,4 @@ instance Functor ZipList' where
 instance Applicative ZipList' where
     pure x = ZipList' (repeat' x)
 
-    -- <* > should use zipWith'
     (ZipList' fs) <*> (ZipList' xs) = ZipList' (zipWith' ($) fs xs)

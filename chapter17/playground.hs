@@ -1,4 +1,4 @@
-import Text.Read (Lexeme(Ident))
+import Text.Read
 newtype Identity a = Identity a
   deriving (Eq, Ord, Show)
 
