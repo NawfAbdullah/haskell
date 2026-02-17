@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Control.Monad (replicateM)
+import Control.Monad (replicateM, Monad (return))
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.ByteString.Char8 as BC
 import Data.Text.Encoding (decodeUtf8, encodeUtf8)
@@ -22,8 +22,19 @@ randomElement xs = do
     randomDigit <- SR.randomRIO (0, maxIndex) :: IO Int 
     return $ xs !! randomDigit
 
-shortyGen :: IO String
-shortyGen = replicateM 7 (randomElement alphaNum)
+shortyGen :: R.Connection -> IO String
+shortyGen rConn = do  
+     
+    seq <- replicateM 7 (randomElement alphaNum)
+    x <- liftIO (getURI rConn (BC.pack seq)) 
+    case x of 
+            Left reply -> do
+                putStrLn $ "Redis Error: " ++ show reply
+                shortyGen rConn
+            Right mbDs -> case mbDs of
+                Nothing -> return seq 
+                Just bs -> shortyGen rConn
+
 
 saveURI :: R.Connection -> BC.ByteString -> BC.ByteString -> IO (Either R.Reply R.Status)
 saveURI conn shorty uri = 
@@ -50,6 +61,7 @@ shortyCreated resp shorty =
         TL.pack " shorty is: ", 
         TL.pack (linkShorty shorty)
     ]
+
 shortyAintUri :: TL.Text -> TL.Text
 shortyAintUri shorty = 
     TL.concat [
@@ -68,6 +80,7 @@ shortyFound tbs =
         TL.pack "</a>"
     ]
 
+
 app :: R.Connection -> ScottyM ()
 app rConn = do 
     get "/" $ do 
@@ -77,7 +90,7 @@ app rConn = do
             parsedURI = parseURI (TL.unpack uri)
         case parsedURI of
             Just _ -> do 
-                shawty <- liftIO shortyGen
+                shawty <- liftIO (shortyGen rConn)
                 let shorty = BC.pack shawty
                     uri' = encodeUtf8 (TL.toStrict uri)
                 resp <- liftIO $ saveURI rConn shorty uri'
