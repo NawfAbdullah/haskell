@@ -1,0 +1,14 @@
+# This sets the "Snapshot" - the specific version of GHC and libraries
+resolver: lts-21.25
+
+# This tells Stack where your source code lives (the current folder)
+packages:
+- .
+
+# If you ever need a library NOT in the snapshot, you list it here.
+# For now, leave it empty.
+extra-deps: []
+
+# Flags to pass to GHC (optional, but good for warnings)
+ghc-options:
+  "$locals": -Wall
